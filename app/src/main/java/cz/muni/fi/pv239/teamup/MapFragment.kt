@@ -2,6 +2,7 @@ package cz.muni.fi.pv239.teamup
 
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -63,8 +64,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(mMap: GoogleMap) {
         gMap = mMap
 
-//        enableLocation() // TODO - zjistit jak to zavolat aby to nespadlo
-        Log.e(TAG, "sme tu")
+        enableLocationWithPermissionCheck()
 
         // set map style from map_style.json, possible to edit on https://mapstyle.withgoogle.com/
         try {
@@ -94,6 +94,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(viewBorder.center, defaultZoom))
     }
 
+    @SuppressLint("MissingPermission")
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public fun enableLocation() {
         // For showing a move to my location button
