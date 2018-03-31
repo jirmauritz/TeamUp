@@ -38,11 +38,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private val northBorder: Double by lazy { resources.getString(R.string.northBorder).toDouble() }
     private val eastBorder: Double by lazy { resources.getString(R.string.eastBorder).toDouble() }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
         // Inflate the layout for this fragment
-        val rootView: View = inflater?.inflate(R.layout.fragment_map, container, false)
+        val rootView: View = inflater.inflate(R.layout.fragment_map, container, false)
                 ?: throw IllegalArgumentException("Inflator in MapFragment is null.")
 
         val mapView = rootView.findViewById<MapView>(R.id.mapView)
@@ -51,7 +52,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mapView.onResume() // needed to get the map to display immediately
 
         try {
-            MapsInitializer.initialize(activity.applicationContext)
+            MapsInitializer.initialize(activity?.applicationContext)
         } catch (e: Exception) {
             e.printStackTrace()
         }
