@@ -39,6 +39,7 @@ class SignInActivity : AppCompatActivity() {
         // Initialize Firebase
         FirebaseApp.initializeApp(this)
         database = FirebaseDatabase.getInstance().reference
+
         // start sign-in activity
         signIn()
     }
@@ -59,7 +60,15 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (data == null) {
+            // Sign in failed, check response for error code
+            Log.e(this::class.java.name, "User is not signed up. Error code: " + resultCode.toString())
+            // notify
+            Snackbar.make(coordinatorLayout, getString(R.string.signInNotSuccssesful), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.tryAgain), { signIn() })
+                    .show()
+        }
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {

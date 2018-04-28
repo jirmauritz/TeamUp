@@ -20,7 +20,6 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import cz.muni.fi.pv239.teamup.R
 import cz.muni.fi.pv239.teamup.data.SportEvent
 import kotlinx.android.synthetic.main.activity_add_event.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -37,8 +36,6 @@ class AddEventActivity :
     private lateinit var timePicker: TimePickerDialog
 
     private var dateTime: Calendar = Calendar.getInstance()
-    private val dateFormatter = SimpleDateFormat("dd.MM.yyyy")
-    private val timeFormatter = SimpleDateFormat("HH:mm")
 
     private lateinit var location: Place
 
@@ -64,7 +61,7 @@ class AddEventActivity :
                 true
         )
         // set default place as location
-            Places.getGeoDataClient(this, null).getPlaceById(DEFAULT_PLACE_ID).addOnCompleteListener({ task ->
+        Places.getGeoDataClient(this, null).getPlaceById(DEFAULT_PLACE_ID).addOnCompleteListener({ task ->
             if (task.isSuccessful) {
                 val places = task.result
                 val place = places.get(0)
@@ -77,7 +74,7 @@ class AddEventActivity :
         })
 
         date_view.text = formatDate()
-        time_view.text = timeFormatter.format(now.time)
+        time_view.text = SportEvent.timeFormatter.format(now.time)
     }
 
     fun onAddClick(v: View) {
@@ -88,7 +85,8 @@ class AddEventActivity :
         val event = SportEvent(
                 eventNameView.text.toString(),
                 shpr.getString("user.uid", null),
-                dateTime,
+                SportEvent.dateFormatter.format(dateTime.time),
+                SportEvent.timeFormatter.format(dateTime.time),
                 location.id,
                 location.name.toString(),
                 maxPeopleView.text.toString().toInt(),
@@ -123,7 +121,7 @@ class AddEventActivity :
     override fun onTimeSet(view: TimePickerDialog?, hourOfDay: Int, minute: Int, second: Int) {
         dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
         dateTime.set(Calendar.MINUTE, minute)
-        time_view.text = timeFormatter.format(dateTime.time)
+        time_view.text = SportEvent.timeFormatter.format(dateTime.time)
     }
 
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
@@ -155,10 +153,10 @@ class AddEventActivity :
             1 -> getString(R.string.sunday)
             else -> ""
         }
-        return dateFormatter.format(dateTime.time) + "    " + dayOfWeek
+        return SportEvent.dateFormatter.format(dateTime.time) + "    " + dayOfWeek
     }
 
-    private fun valid():Boolean {
+    private fun valid(): Boolean {
         val maxPeople = maxPeopleView.text.toString().toInt()
         val actualPeople = actualPeopleView.text.toString().toInt()
         if (maxPeople < 2) {

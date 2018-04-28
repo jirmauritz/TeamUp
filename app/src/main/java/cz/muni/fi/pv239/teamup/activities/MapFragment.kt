@@ -10,11 +10,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import cz.muni.fi.pv239.teamup.R
+import cz.muni.fi.pv239.teamup.data.SportEvent
+import kotlinx.android.synthetic.main.activity_add_event.*
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 
@@ -96,6 +100,25 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(viewBorder.center, defaultZoom))
     }
 
+    fun addMarker(key: String, event: SportEvent) {
+        // get place
+        Places.getGeoDataClient(activity as MapActivity, null).getPlaceById(event.locationId).addOnCompleteListener({ task ->
+            if (task.isSuccessful) {
+                val places = task.result
+                val placeInList = places.get(0)
+                val place = placeInList.freeze()
+                places.release()
+                val marker = gMap.addMarker(MarkerOptions()
+                        .position(place.latLng)
+                        .alpha(0.9f))
+                marker.tag = key
+            } else {
+                Log.e(this::class.java.name, "Default place not found.")
+            }
+        })
+
+    }
+
     @SuppressLint("MissingPermission")
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public fun enableLocation() {
@@ -108,5 +131,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // NOTE: delegate the permission handling to generated function
         onRequestPermissionsResult(requestCode, grantResults)
     }
+
 
 }// Required empty public constructor

@@ -25,4 +25,8 @@
     <string name="adding">Vytváření...</string>
     <string name="one">1</string>
     <string name="two">2</string>
+    <string name="place">Místo</string>
+    <string name="date">Datum</string>
+    <string name="time">Čas</string>
+    <string name="title">Název</string>
 </resources>
