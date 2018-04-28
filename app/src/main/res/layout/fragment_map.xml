@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cz.muni.fi.pv239.teamup.MapFragment">
+    tools:context="cz.muni.fi.pv239.teamup.activities.MapFragment">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"

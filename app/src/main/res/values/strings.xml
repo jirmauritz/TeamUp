@@ -14,4 +14,15 @@
     <string name="friday">Pátek</string>
     <string name="saturday">Sobota</string>
     <string name="sunday">Neděle</string>
+    <string name="lowMaxPeople">Maximální počet lidí musí být alespoň 2.</string>
+    <string name="lowerActualThanMaxPeople">Aktuální počet lidí musí být menší než maximální.</string>
+    <string name="emptyEventName">Vyplňte prosím název akce.</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="signingIn">Přihlašování...</string>
+    <string name="tryAgain">ZKUSIT ZNOVU</string>
+    <string name="signInNotSuccssesful">Přihlášení se nezdařilo, zkontrolujte připojení</string>
+    <string name="successfulyCreated">Sportovní událost úspěšně vytvořena.</string>
+    <string name="adding">Vytváření...</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
 </resources>

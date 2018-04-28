@@ -1,4 +1,4 @@
-package cz.muni.fi.pv239.teamup
+package cz.muni.fi.pv239.teamup.activities
 
 
 import android.Manifest
@@ -14,6 +14,7 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
+import cz.muni.fi.pv239.teamup.R
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 
