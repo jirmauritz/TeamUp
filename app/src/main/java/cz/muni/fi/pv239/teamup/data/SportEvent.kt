@@ -3,6 +3,7 @@ package cz.muni.fi.pv239.teamup.data
 import java.text.SimpleDateFormat
 
 data class SportEvent(
+        val key: String = "",
         val name: String = "",
         val userUid: String = "",
         val date: String = "",

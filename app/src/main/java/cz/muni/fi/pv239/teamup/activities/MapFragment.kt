@@ -12,13 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import cz.muni.fi.pv239.teamup.R
 import cz.muni.fi.pv239.teamup.data.SportEvent
-import kotlinx.android.synthetic.main.activity_add_event.*
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 
@@ -36,6 +32,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var gMap: GoogleMap
     // center of the map
     private lateinit var mapCenter: LatLng
+    // markers
+    val markers = mutableMapOf<String, Marker>()
 
     private val defaultZoom: Float by lazy { resources.getString(R.string.defaultZoom).toFloat() }
     private val southBorder: Double by lazy { resources.getString(R.string.southBorder).toDouble() }
@@ -69,6 +67,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(mMap: GoogleMap) {
         gMap = mMap
+
+        gMap.setOnMarkerClickListener(activity as MapActivity)
 
         enableLocationWithPermissionCheck()
 
@@ -110,13 +110,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 places.release()
                 val marker = gMap.addMarker(MarkerOptions()
                         .position(place.latLng)
-                        .alpha(0.9f))
+                        .alpha(0.9f)
+                        .icon(BitmapDescriptorFactory.defaultMarker(22f))
+                        .title(event.name)
+                        .snippet(event.locationName))
                 marker.tag = key
+                markers[key] = marker
             } else {
                 Log.e(this::class.java.name, "Default place not found.")
             }
         })
+    }
 
+    fun focusMarker(key: String) {
+        val marker = markers[key]
+        marker?.showInfoWindow()
+        gMap.animateCamera(CameraUpdateFactory.newLatLng(marker?.position))
     }
 
     @SuppressLint("MissingPermission")

@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.Marker
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import cz.muni.fi.pv239.teamup.R
@@ -15,7 +17,7 @@ import cz.muni.fi.pv239.teamup.recycler.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_map.*
 
 
-class MapActivity : AppCompatActivity() {
+class MapActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
 
     // database
     private lateinit var database: DatabaseReference
@@ -52,6 +54,7 @@ class MapActivity : AppCompatActivity() {
             selectedView?.isSelected = false
             view.isSelected = true
             selectedView = view
+            mapFragment.focusMarker(event.key)
         })
 
         val layoutManager = LinearLayoutManager(applicationContext)
@@ -87,6 +90,16 @@ class MapActivity : AppCompatActivity() {
         }
         database.child("events").addChildEventListener(childEventListener)
 
+    }
+
+    override fun onMarkerClick(marker: Marker?): Boolean {
+        val position = events.values.indexOf(events[marker?.tag as String])
+        val view: View = recyclerView.findViewHolderForAdapterPosition(position).itemView
+        selectedView?.isSelected = false
+        view.isSelected = true
+        selectedView = view
+        mapFragment.focusMarker(marker.tag as String)
+        return true
     }
 
     override fun onBackPressed() {

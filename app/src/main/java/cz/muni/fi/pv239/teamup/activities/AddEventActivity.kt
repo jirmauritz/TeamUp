@@ -83,6 +83,7 @@ class AddEventActivity :
         val key = database.child("events").push().key
         val shpr = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
         val event = SportEvent(
+                key,
                 eventNameView.text.toString(),
                 shpr.getString("user.uid", null),
                 SportEvent.dateFormatter.format(dateTime.time),
