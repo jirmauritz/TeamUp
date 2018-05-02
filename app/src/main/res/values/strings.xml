@@ -29,4 +29,5 @@
     <string name="date">Datum</string>
     <string name="time">Čas</string>
     <string name="title">Název</string>
+    <string name="addEventActivity">Nová sportovní aktivita</string>
 </resources>
