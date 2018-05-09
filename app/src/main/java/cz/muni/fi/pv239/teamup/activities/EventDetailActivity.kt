@@ -25,7 +25,8 @@ class EventDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_detail)
 
-        // init database
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         // Initialize Firebase
         FirebaseApp.initializeApp(this)
         database = FirebaseDatabase.getInstance().reference
@@ -49,6 +50,8 @@ class EventDetailActivity : AppCompatActivity() {
                 detailDateView.text = event.date
                 detailTimeView.text = event.time
                 detailPlaceView.text = event.locationName
+                // set title
+                supportActionBar?.title = event.name
             }
         }
         database.child("events").child(intent.getStringExtra("eventKey")).addListenerForSingleValueEvent(oneTimeListener)

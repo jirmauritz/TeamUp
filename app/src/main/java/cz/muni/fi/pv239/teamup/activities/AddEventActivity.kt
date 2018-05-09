@@ -46,7 +46,7 @@ class AddEventActivity :
         setContentView(R.layout.activity_add_event)
 
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // set current date
         val now = Calendar.getInstance()

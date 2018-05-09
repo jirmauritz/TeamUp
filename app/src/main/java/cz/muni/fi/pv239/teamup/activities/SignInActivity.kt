@@ -100,8 +100,8 @@ class SignInActivity : AppCompatActivity() {
                     editor.apply()
                     // log it
                     Log.d(this::class.java.name, "Signed in as a user " + user.displayName)
-                    // go to MapActivity
-                    startActivity(Intent(this, MapActivity::class.java))
+                    // go to MainActivity
+                    startActivity(Intent(this, MainActivity::class.java))
                 }
             } else {
                 // Sign in failed, check response for error code
