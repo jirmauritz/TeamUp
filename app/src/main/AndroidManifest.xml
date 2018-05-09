@@ -44,6 +44,10 @@
         <activity android:name=".activities.MyEventsActivity"
             android:label="@string/myEvents"
             android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.UpcomingEventsActivity"
+            android:label="Nadcházející události"
+            android:parentActivityName=".activities.MainActivity"
+            />
     </application>
 
 </manifest>

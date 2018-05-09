@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="cz.muni.fi.pv239.teamup.activities.SignInActivity">
     <item
-        android:id="@+id/action_active_events"
+        android:id="@+id/action_upcoming_events"
         android:orderInCategory="100"
         android:title="@string/menu_action_active_events"
         app:showAsAction="never" />
