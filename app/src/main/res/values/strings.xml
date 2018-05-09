@@ -30,4 +30,7 @@
     <string name="time">Čas</string>
     <string name="title">Název</string>
     <string name="addEventActivity">Nová sportovní aktivita</string>
+    <string name="notCorrectLoad">Sportovní událost se nenačetla správně.</string>
+    <string name="participants">Účastníci</string>
+    <string name="join">Přidat se</string>
 </resources>

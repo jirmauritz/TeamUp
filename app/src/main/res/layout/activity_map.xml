@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayoutMapView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MapActivity">
+    tools:context=".activities.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarView"
@@ -47,16 +47,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarView">
 
-        <fragment
-            android:id="@+id/fragment_frame_for_map"
-            android:name="cz.muni.fi.pv239.teamup.activities.MapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            tools:layout="@layout/fragment_map" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
