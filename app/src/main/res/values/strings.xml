@@ -33,4 +33,7 @@
     <string name="notCorrectLoad">Sportovní událost se nenačetla správně.</string>
     <string name="participants">Účastníci</string>
     <string name="join">Přidat se</string>
+    <string name="menu_action_active_events">Nadcházející události</string>
+    <string name="menu_action_history">Historie</string>
+    <string name="menu_action_signout">Odhlásit se</string>
 </resources>

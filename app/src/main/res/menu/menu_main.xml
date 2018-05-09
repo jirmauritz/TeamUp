@@ -3,8 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="cz.muni.fi.pv239.teamup.activities.SignInActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_active_events"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/menu_action_active_events"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_history"
+        android:orderInCategory="100"
+        android:title="@string/menu_action_history"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_signout"
+        android:orderInCategory="100"
+        android:title="@string/menu_action_signout"
+        app:showAsAction="never" />
+
 </menu>

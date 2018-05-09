@@ -6,9 +6,10 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.Marker
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import cz.muni.fi.pv239.teamup.R
@@ -85,6 +86,34 @@ class MainActivity : AppCompatActivity() {
         }
         database.child("events").addChildEventListener(childEventListener)
 
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            R.id.action_active_events -> {
+                return true
+            }
+            R.id.action_history -> {
+                return true
+            }
+            R.id.action_signout -> {
+                signOut()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun signOut() {
+        AuthUI.getInstance().signOut(this)
+        startActivity(Intent(this, SignInActivity::class.java))
     }
 
     override fun onBackPressed() {
