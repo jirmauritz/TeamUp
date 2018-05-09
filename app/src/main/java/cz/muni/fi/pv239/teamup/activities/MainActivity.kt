@@ -1,5 +1,6 @@
 package cz.muni.fi.pv239.teamup.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -81,7 +82,11 @@ class MainActivity : AppCompatActivity() {
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 val event: SportEvent = dataSnapshot.getValue(SportEvent::class.java)
                         ?: throw IllegalStateException("Added Event is null")
-                if (SportEvent.dateFormatter.parse(event.date).after(Calendar.getInstance().time)) {
+
+                val shpr = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
+                val uid = shpr.getString("user.uid", null)
+                if (SportEvent.dateFormatter.parse(event.date).after(Calendar.getInstance().time)
+                        && event.userUid != uid && !event.signedUsers.contains(uid)) {
                     events[dataSnapshot.key] = event
                     listAdapter.notifyDataSetChanged()
                 }
