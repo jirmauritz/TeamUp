@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayoutMainView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    tools:context=".activities.HistoryActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarView"
@@ -89,18 +89,4 @@
             android:layout_height="match_parent" />
 
     </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabMainView"
-        android:layout_width="377dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:srcCompat="@drawable/add_sign"
-        app:backgroundTint="?attr/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
 </android.support.constraint.ConstraintLayout>

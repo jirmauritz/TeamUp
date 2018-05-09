@@ -38,6 +38,9 @@
         <activity android:name=".activities.EventDetailActivity"
             android:parentActivityName=".activities.MainActivity"
             />
+        <activity android:name=".activities.HistoryActivity"
+            android:label="@string/history"
+            android:parentActivityName=".activities.MainActivity"/>
     </application>
 
 </manifest>

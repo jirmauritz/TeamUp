@@ -37,4 +37,5 @@
     <string name="menu_action_history">Historie</string>
     <string name="menu_action_signout">Odhlásit se</string>
     <string name="signedParitcipants">Přihlášení účastníci</string>
+    <string name="history">Historie</string>
 </resources>
