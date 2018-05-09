@@ -45,6 +45,9 @@ class AddEventActivity :
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_event)
 
+
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         // set current date
         val now = Calendar.getInstance()
         datePicker = DatePickerDialog.newInstance(
