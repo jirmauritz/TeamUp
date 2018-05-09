@@ -1,5 +1,6 @@
 package cz.muni.fi.pv239.teamup.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -77,7 +78,11 @@ class HistoryActivity : AppCompatActivity() {
 
 
 
-                if (SportEvent.dateFormatter.parse(event.date).before(Calendar.getInstance().time)) {
+                val shpr = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
+                val uid = shpr.getString("user.uid", null)
+                if (SportEvent.dateFormatter.parse(event.date).before(Calendar.getInstance().time)
+                        && event.signedUsers.contains(uid)) {
+
                     events[dataSnapshot.key] = event
                     listAdapter.notifyDataSetChanged()
                 }
