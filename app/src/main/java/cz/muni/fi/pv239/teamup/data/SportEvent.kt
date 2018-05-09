@@ -11,7 +11,7 @@ data class SportEvent(
         val locationId: String = "",
         val locationName: String = "",
         val maxPeople: Int = 0,
-        val actualPeople: Int = 0,
+        var actualPeople: Int = 0,
         val signedUsers: MutableList<String> = mutableListOf()
 ) {
     companion object {

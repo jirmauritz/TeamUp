@@ -38,4 +38,7 @@
     <string name="menu_action_signout">Odhlásit se</string>
     <string name="signedParitcipants">Přihlášení účastníci</string>
     <string name="history">Historie</string>
+    <string name="youAreIn">Jste na soupisce!</string>
+    <string name="removeFromEvent">Odebrat se z aktivity</string>
+    <string name="removedFromEvent">Byl jste odebrán ze soupisky</string>
 </resources>
