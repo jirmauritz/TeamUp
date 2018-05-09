@@ -2,52 +2,105 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinatorLayout"
+    android:id="@+id/constraintLayoutMapView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cz.muni.fi.pv239.teamup.activities.SignInActivity">
+    tools:context=".activities.MainActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout2"
+        android:id="@+id/appBarView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="29dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/signingIn"
-        android:textSize="24sp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarView">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="117dp"
-        android:layout_height="113dp"
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/headerName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".25"
+                android:text="@string/title"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/headerLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".25"
+                android:text="@string/place"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/headerDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".25"
+                android:text="@string/date"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/headerTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".25"
+                android:text="@string/time"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/line" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabMapView"
+        android:layout_width="377dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:scaleType="fitXY"
-        android:contentDescription="@android:string/untitled"
+        app:srcCompat="@drawable/add_sign"
+        app:backgroundTint="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher" />
-
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

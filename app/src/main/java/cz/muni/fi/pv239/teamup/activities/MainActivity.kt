@@ -15,7 +15,7 @@ import com.google.firebase.database.*
 import cz.muni.fi.pv239.teamup.R
 import cz.muni.fi.pv239.teamup.data.SportEvent
 import cz.muni.fi.pv239.teamup.recycler.RecyclerViewAdapter
-import kotlinx.android.synthetic.main.activity_map.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
+        setContentView(R.layout.activity_main)
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this)

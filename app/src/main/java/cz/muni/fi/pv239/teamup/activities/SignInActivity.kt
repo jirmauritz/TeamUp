@@ -15,7 +15,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import cz.muni.fi.pv239.teamup.R
 import cz.muni.fi.pv239.teamup.data.User
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_signin.*
 import java.util.Arrays.asList
 
 
@@ -32,7 +32,7 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_signin)
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this)

@@ -8,9 +8,8 @@ import com.google.firebase.database.*
 import cz.muni.fi.pv239.teamup.R
 import cz.muni.fi.pv239.teamup.data.SportEvent
 import kotlinx.android.synthetic.main.activity_event_detail.*
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_signin.*
 import android.widget.ArrayAdapter
-import kotlinx.android.synthetic.main.participant.*
 
 
 class EventDetailActivity : AppCompatActivity() {
