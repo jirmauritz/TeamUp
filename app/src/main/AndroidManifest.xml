@@ -41,6 +41,9 @@
         <activity android:name=".activities.HistoryActivity"
             android:label="@string/history"
             android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.MyEventsActivity"
+            android:label="@string/myEvents"
+            android:parentActivityName=".activities.MainActivity"/>
     </application>
 
 </manifest>
