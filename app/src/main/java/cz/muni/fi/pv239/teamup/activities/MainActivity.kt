@@ -17,13 +17,10 @@ import cz.muni.fi.pv239.teamup.recycler.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_map.*
 
 
-class MapActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
+class MainActivity : AppCompatActivity() {
 
     // database
     private lateinit var database: DatabaseReference
-
-    // map view fragment
-    private lateinit var mapFragment: MapFragment
 
     // all events
     private val events = mutableMapOf<String, SportEvent>()
@@ -42,9 +39,6 @@ class MapActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
         FirebaseApp.initializeApp(this)
         database = FirebaseDatabase.getInstance().reference
 
-        // get map fragment
-        mapFragment = supportFragmentManager.findFragmentById(R.id.fragment_frame_for_map) as MapFragment
-
         fabMapView.setOnClickListener { view ->
             run { startActivity(Intent(this, AddEventActivity::class.java)) }
         }
@@ -54,7 +48,9 @@ class MapActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
             selectedView?.isSelected = false
             view.isSelected = true
             selectedView = view
-            mapFragment.focusMarker(event.key)
+            val intent = Intent(this, EventDetailActivity::class.java)
+            intent.putExtra("eventKey", event.key)
+            startActivity(intent)
         })
 
         val layoutManager = LinearLayoutManager(applicationContext)
@@ -85,21 +81,10 @@ class MapActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
                         ?: throw IllegalStateException("Added Event is null")
                 events[dataSnapshot.key] = event
                 listAdapter.notifyDataSetChanged()
-                mapFragment.addMarker(dataSnapshot.key, event)
             }
         }
         database.child("events").addChildEventListener(childEventListener)
 
-    }
-
-    override fun onMarkerClick(marker: Marker?): Boolean {
-        val position = events.values.indexOf(events[marker?.tag as String])
-        val view: View = recyclerView.findViewHolderForAdapterPosition(position).itemView
-        selectedView?.isSelected = false
-        view.isSelected = true
-        selectedView = view
-        mapFragment.focusMarker(marker.tag as String)
-        return true
     }
 
     override fun onBackPressed() {

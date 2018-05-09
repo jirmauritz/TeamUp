@@ -68,8 +68,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(mMap: GoogleMap) {
         gMap = mMap
 
-        gMap.setOnMarkerClickListener(activity as MapActivity)
-
         enableLocationWithPermissionCheck()
 
         // set map style from map_style.json, possible to edit on https://mapstyle.withgoogle.com/
@@ -102,7 +100,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     fun addMarker(key: String, event: SportEvent) {
         // get place
-        Places.getGeoDataClient(activity as MapActivity, null).getPlaceById(event.locationId).addOnCompleteListener({ task ->
+        Places.getGeoDataClient(activity as EventDetailActivity, null).getPlaceById(event.locationId).addOnCompleteListener({ task ->
             if (task.isSuccessful) {
                 val places = task.result
                 val placeInList = places.get(0)
@@ -116,16 +114,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         .snippet(event.locationName))
                 marker.tag = key
                 markers[key] = marker
+                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.latLng, defaultZoom))
             } else {
                 Log.e(this::class.java.name, "Default place not found.")
             }
         })
-    }
-
-    fun focusMarker(key: String) {
-        val marker = markers[key]
-        marker?.showInfoWindow()
-        gMap.animateCamera(CameraUpdateFactory.newLatLng(marker?.position))
     }
 
     @SuppressLint("MissingPermission")
