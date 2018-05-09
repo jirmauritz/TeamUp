@@ -29,9 +29,13 @@ class EventDetailActivity : AppCompatActivity() {
     private lateinit var event: SportEvent
 
     // participants
+    private var users: MutableMap<String, User> = mutableMapOf()
     private var participants: MutableList<String> = mutableListOf()
     private lateinit var participantsAdapter: ArrayAdapter<String>
 
+    // listeners
+    private lateinit var userListener: ValueEventListener
+    private lateinit var eventListener: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,27 +56,35 @@ class EventDetailActivity : AppCompatActivity() {
         detailParticipantsView.adapter = participantsAdapter
 
         // fetch user from Firebase
-        val userListener = object : ValueEventListener {
+        userListener = object : ValueEventListener {
             override fun onCancelled(dataSnapshot: DatabaseError?) {
                 Snackbar.make(coordinatorLayout, getString(R.string.notCorrectLoad), Snackbar.LENGTH_INDEFINITE).show()
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // the user was received
-                val user = dataSnapshot.getValue(User::class.java) ?: throw IllegalStateException("User is null")
-                participants.add(user.displayName)
+                val user = dataSnapshot.getValue(User::class.java)
+                        ?: throw IllegalStateException("User is null")
+                users[user.uid] = user
+                // addd user if not present
+                if (!participants.contains(user.displayName)) participants.add(user.displayName)
+                // remove user if its the last
+                val intersection = participants.toMutableList()
+                intersection.removeAll(users.map { it.value.displayName })
+                if (users.size + 1 == participants.size) participants.remove(intersection[0])
                 // show in view
                 participantsAdapter.notifyDataSetChanged()
                 // if actual user equals this one, change text to remove user
                 val shpr = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
                 if (user.uid == shpr.getString("user.uid", null)) {
                     joinButton.text = getString(R.string.removeFromEvent)
+                    joinButton.visibility = View.VISIBLE
                 }
             }
         }
 
         // fetch event from Firebase
-        val eventListener = object : ValueEventListener {
+        eventListener = object : ValueEventListener {
             override fun onCancelled(dataSnapshot: DatabaseError?) {
                 Snackbar.make(coordinatorLayout, getString(R.string.notCorrectLoad), Snackbar.LENGTH_INDEFINITE).show()
             }
@@ -89,16 +101,47 @@ class EventDetailActivity : AppCompatActivity() {
                 detailPlaceView.text = event.locationName
                 // set title
                 supportActionBar?.title = event.name
-                for (uid in event.signedUsers) {
-                    database.child("users").child(uid).addListenerForSingleValueEvent(userListener)
-                }
+
                 // hide button if full
                 if (event.actualPeople == event.maxPeople) {
                     joinButton.visibility = View.GONE
                 }
+
+                for (uid in event.signedUsers) {
+                    database.child("users").child(uid).addListenerForSingleValueEvent(userListener)
+                }
+
+                // detele all if no user
+                if (event.signedUsers.isEmpty()) {
+                    participants.clear()
+                    participantsAdapter.notifyDataSetChanged()
+                }
+
             }
         }
-        database.child("events").child(intent.getStringExtra("eventKey")).addListenerForSingleValueEvent(eventListener)
+
+        val globalListener = object : ChildEventListener {
+            override fun onCancelled(dataSnapshot: DatabaseError?) {
+            }
+
+            override fun onChildMoved(dataSnapshot: DataSnapshot?, previousChildName: String?) {
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot?, previousChildName: String?) {
+                reload()
+            }
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+            }
+
+            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+        }
+
+        database.child("events").addChildEventListener(globalListener)
+
+        reload()
     }
 
     fun joinButtonAction(v: View) {
@@ -109,32 +152,33 @@ class EventDetailActivity : AppCompatActivity() {
             event.actualPeople -= 1
             database.child("events").child(event.key).setValue(event, { databaseError: DatabaseError?, _ ->
                 if (databaseError == null) {
-                    Snackbar.make(v, getString(R.string.removedFromEvent), Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(v, getString(R.string.removedFromEvent), Snackbar.LENGTH_SHORT).show()
                     joinButton.text = getString(R.string.join)
-                    detailPeopleView.text = event.actualPeople.toString() + " / " + event.maxPeople.toString()
-                    participants.remove(shpr.getString("user.name", null))
-                    participantsAdapter.notifyDataSetChanged()
+//                    reload()
                 } else {
-                    Snackbar.make(v, databaseError.message, Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(v, databaseError.message, Snackbar.LENGTH_SHORT).show()
                 }
             })
-            Snackbar.make(v, getString(R.string.adding), Snackbar.LENGTH_INDEFINITE).show()
+            Snackbar.make(v, getString(R.string.removing), Snackbar.LENGTH_INDEFINITE).show()
         } else {
             // join
             event.signedUsers.add(shpr.getString("user.uid", null))
             event.actualPeople += 1
             database.child("events").child(event.key).setValue(event, { databaseError: DatabaseError?, _ ->
                 if (databaseError == null) {
-                    Snackbar.make(v, getString(R.string.youAreIn), Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(v, getString(R.string.youAreIn), Snackbar.LENGTH_SHORT).show()
                     joinButton.text = getString(R.string.removeFromEvent)
-                    detailPeopleView.text = event.actualPeople.toString() + " / " + event.maxPeople.toString()
-                    participants.add(shpr.getString("user.name", null))
-                    participantsAdapter.notifyDataSetChanged()
+//                    reload()
                 } else {
-                    Snackbar.make(v, databaseError.message, Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(v, databaseError.message, Snackbar.LENGTH_SHORT).show()
                 }
             })
-            Snackbar.make(v, getString(R.string.adding), Snackbar.LENGTH_INDEFINITE).show()
+            Snackbar.make(v, getString(R.string.creating), Snackbar.LENGTH_INDEFINITE).show()
         }
+    }
+
+    fun reload() {
+        users.clear()
+        database.child("events").child(intent.getStringExtra("eventKey")).addListenerForSingleValueEvent(eventListener)
     }
 }
