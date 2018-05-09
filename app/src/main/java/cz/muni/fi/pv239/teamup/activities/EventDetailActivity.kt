@@ -9,6 +9,9 @@ import cz.muni.fi.pv239.teamup.R
 import cz.muni.fi.pv239.teamup.data.SportEvent
 import kotlinx.android.synthetic.main.activity_event_detail.*
 import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.ArrayAdapter
+import kotlinx.android.synthetic.main.participant.*
+
 
 class EventDetailActivity : AppCompatActivity() {
 
@@ -25,6 +28,7 @@ class EventDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_detail)
 
+        // set back buttion on toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // Initialize Firebase
@@ -52,6 +56,9 @@ class EventDetailActivity : AppCompatActivity() {
                 detailPlaceView.text = event.locationName
                 // set title
                 supportActionBar?.title = event.name
+                // set listview
+                val adapter = ArrayAdapter<String>(this@EventDetailActivity, R.layout.participant, event.signedUsers)
+                detailParticipantsView.adapter = adapter
             }
         }
         database.child("events").child(intent.getStringExtra("eventKey")).addListenerForSingleValueEvent(oneTimeListener)

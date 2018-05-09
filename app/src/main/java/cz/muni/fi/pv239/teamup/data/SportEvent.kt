@@ -11,7 +11,8 @@ data class SportEvent(
         val locationId: String = "",
         val locationName: String = "",
         val maxPeople: Int = 0,
-        val actualPeople: Int = 0
+        val actualPeople: Int = 0,
+        val signedUsers: MutableList<String> = mutableListOf()
 ) {
     companion object {
         val dateFormatter = SimpleDateFormat("dd.MM.yyyy")

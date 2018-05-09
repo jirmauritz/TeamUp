@@ -45,7 +45,6 @@ class AddEventActivity :
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_event)
 
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // set current date
@@ -94,7 +93,8 @@ class AddEventActivity :
                 location.id,
                 location.name.toString(),
                 maxPeopleView.text.toString().toInt(),
-                actualPeopleView.text.toString().toInt())
+                actualPeopleView.text.toString().toInt(),
+                mutableListOf(shpr.getString("user.uid", null)))
         database.child("events").child(key).setValue(event, { databaseError: DatabaseError?, _ ->
             if (databaseError == null) {
                 Snackbar.make(v, getString(R.string.successfulyCreated), Snackbar.LENGTH_LONG).show()

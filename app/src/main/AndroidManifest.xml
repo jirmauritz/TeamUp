@@ -35,7 +35,9 @@
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activities.EventDetailActivity"></activity>
+        <activity android:name=".activities.EventDetailActivity"
+            android:parentActivityName=".activities.MainActivity"
+            />
     </application>
 
 </manifest>
