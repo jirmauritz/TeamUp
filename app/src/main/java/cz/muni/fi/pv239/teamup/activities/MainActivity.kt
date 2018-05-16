@@ -85,8 +85,13 @@ class MainActivity : AppCompatActivity() {
 
                 val shpr = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
                 val uid = shpr.getString("user.uid", null)
-                if (SportEvent.dateFormatter.parse(event.date).after(Calendar.getInstance().time)
-                        && event.userUid != uid && !event.signedUsers.contains(uid)) {
+
+                val cal = Calendar.getInstance()
+                cal.set(Calendar.HOUR_OF_DAY, 0)
+                cal.set(Calendar.MINUTE, 0)
+                cal.set(Calendar.SECOND, 0)
+
+                if (SportEvent.getDateWithTime(event.date, event.time).time.after(cal.time)) {
                     events[dataSnapshot.key] = event
                     listAdapter.notifyDataSetChanged()
                 }

@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
@@ -46,6 +47,7 @@ class HistoryActivity : AppCompatActivity() {
             selectedView = view
             val intent = Intent(this, EventDetailActivity::class.java)
             intent.putExtra("eventKey", event.key)
+            intent.putExtra("fromHistory", true)
             startActivity(intent)
         })
 
@@ -77,12 +79,15 @@ class HistoryActivity : AppCompatActivity() {
                         ?: throw IllegalStateException("Added Event is null")
 
 
+                val cal = Calendar.getInstance()
+                cal.set(Calendar.HOUR_OF_DAY, 0)
+                cal.set(Calendar.MINUTE, 0)
+                cal.set(Calendar.SECOND, 0)
 
                 val shpr = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
                 val uid = shpr.getString("user.uid", null)
-                if (SportEvent.dateFormatter.parse(event.date).before(Calendar.getInstance().time)
+                if (SportEvent.getDateWithTime(event.date, event.time).time.before(cal.time)
                         && event.signedUsers.contains(uid)) {
-
                     events[dataSnapshot.key] = event
                     listAdapter.notifyDataSetChanged()
                 }
