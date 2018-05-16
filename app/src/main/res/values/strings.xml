@@ -43,5 +43,4 @@
     <string name="removedFromEvent">Byl jste odebrán ze soupisky</string>
     <string name="myEvents">Moje události</string>
     <string name="menu_action_my_events">Moje události</string>
-    <string name="recreateEvent">Znovu pořádat</string>
 </resources>

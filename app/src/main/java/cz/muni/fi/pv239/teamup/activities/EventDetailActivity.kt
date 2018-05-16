@@ -1,7 +1,6 @@
 package cz.muni.fi.pv239.teamup.activities
 
 import android.content.Context
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -28,7 +27,6 @@ class EventDetailActivity : AppCompatActivity() {
 
     // event
     private lateinit var event: SportEvent
-    private var fromHistory: Boolean = false
 
     // participants
     private var participants: MutableList<String> = mutableListOf()
@@ -38,7 +36,7 @@ class EventDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_detail)
-        fromHistory = intent.getBooleanExtra("fromHistory", false)
+
         // set back buttion on toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -58,6 +56,7 @@ class EventDetailActivity : AppCompatActivity() {
             override fun onCancelled(dataSnapshot: DatabaseError?) {
                 Snackbar.make(coordinatorLayout, getString(R.string.notCorrectLoad), Snackbar.LENGTH_INDEFINITE).show()
             }
+
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // the user was received
                 val user = dataSnapshot.getValue(User::class.java) ?: throw IllegalStateException("User is null")
@@ -77,6 +76,7 @@ class EventDetailActivity : AppCompatActivity() {
             override fun onCancelled(dataSnapshot: DatabaseError?) {
                 Snackbar.make(coordinatorLayout, getString(R.string.notCorrectLoad), Snackbar.LENGTH_INDEFINITE).show()
             }
+
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // the event was received
                 event = dataSnapshot.getValue(SportEvent::class.java) ?: throw IllegalStateException("Added Event is null")
@@ -93,25 +93,15 @@ class EventDetailActivity : AppCompatActivity() {
                     database.child("users").child(uid).addListenerForSingleValueEvent(userListener)
                 }
                 // hide button if full
-                if (event.actualPeople == event.maxPeople && !fromHistory) {
+                if (event.actualPeople == event.maxPeople) {
                     joinButton.visibility = View.GONE
-                }
-
-                if (fromHistory) {
-                    joinButton.text = getString(R.string.recreateEvent)
                 }
             }
         }
-
-         database.child("events").child(intent.getStringExtra("eventKey")).addListenerForSingleValueEvent(eventListener)
+        database.child("events").child(intent.getStringExtra("eventKey")).addListenerForSingleValueEvent(eventListener)
     }
 
     fun joinButtonAction(v: View) {
-
-        if (fromHistory) {
-            startActivity(Intent(this, AddEventActivity::class.java))
-        }
-
         val shpr = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
         if (event.signedUsers.contains(shpr.getString("user.uid", null))) {
             // removal
