@@ -45,4 +45,7 @@
     <string name="menu_action_my_events">Moje události</string>
     <string name="creating">Přidávání</string>
     <string name="removing">Odebírání</string>
+    <string name="extraParticipants"> + %d účastník</string>
+    <string name="extraParticipantsFour">+ %d účastníci</string>
+    <string name="extraParticipantsFive">+ %d účastníků</string>
 </resources>

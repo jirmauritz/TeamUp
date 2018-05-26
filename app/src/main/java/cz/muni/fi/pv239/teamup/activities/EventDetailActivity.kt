@@ -1,20 +1,18 @@
 package cz.muni.fi.pv239.teamup.activities
 
 import android.content.Context
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.Snackbar
+import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.ArrayAdapter
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import cz.muni.fi.pv239.teamup.R
 import cz.muni.fi.pv239.teamup.data.SportEvent
+import cz.muni.fi.pv239.teamup.data.User
 import kotlinx.android.synthetic.main.activity_event_detail.*
 import kotlinx.android.synthetic.main.activity_signin.*
-import android.widget.ArrayAdapter
-import cz.muni.fi.pv239.teamup.data.User
-import kotlinx.android.synthetic.main.participant.*
 
 
 class EventDetailActivity : AppCompatActivity() {
@@ -57,13 +55,13 @@ class EventDetailActivity : AppCompatActivity() {
         // fetch user from Firebase
         userListener = object : ValueEventListener {
             override fun onCancelled(dataSnapshot: DatabaseError?) {
-                Snackbar.make(coordinatorLayout, getString(R.string.notCorrectLoad), Snackbar.LENGTH_INDEFINITE).show()
+                Snackbar.make(detailLayout, getString(R.string.notCorrectLoad), Snackbar.LENGTH_INDEFINITE).show()
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // the user was received
                 val user = dataSnapshot.getValue(User::class.java) ?: throw IllegalStateException("User is null")
-                participants.add(user.displayName)
+                participants.add(0, user.displayName)
                 // show in view
                 participantsAdapter.notifyDataSetChanged()
                 // if actual user equals this one, change text to remove user
@@ -99,9 +97,23 @@ class EventDetailActivity : AppCompatActivity() {
                     joinButton.visibility = View.GONE
                 }
 
+                // add extra participants
+                val extraUsers = event.actualPeople - event.signedUsers.size
+                val participantsString = when {
+                    extraUsers == 1 -> getString(R.string.extraParticipants)
+                    extraUsers > 4 -> getString(R.string.extraParticipantsFive)
+                    else -> getString(R.string.extraParticipantsFour)
+                }
+
+                if (extraUsers > 0) {
+                    participants.add(participantsString.format(extraUsers))
+                }
+
+                // show participants
                 for (uid in event.signedUsers) {
                     database.child("users").child(uid).addListenerForSingleValueEvent(userListener)
                 }
+                participantsAdapter.notifyDataSetChanged()
             }
         }
 
