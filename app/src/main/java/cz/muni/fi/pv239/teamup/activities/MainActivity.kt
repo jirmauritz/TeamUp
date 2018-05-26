@@ -60,9 +60,10 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = listAdapter
-        val dividerItemDecoration = DividerItemDecoration(recyclerView.context, layoutManager.orientation)
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.line)!!)
-        recyclerView.addItemDecoration(dividerItemDecoration)
+        // division line between items
+//        val dividerItemDecoration = DividerItemDecoration(recyclerView.context, layoutManager.orientation)
+//        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.line)!!)
+//        recyclerView.addItemDecoration(dividerItemDecoration)
 
         val childEventListener = object : ChildEventListener {
             override fun onCancelled(dataSnapshot: DatabaseError?) {

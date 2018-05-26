@@ -13,8 +13,7 @@ import com.google.firebase.database.*
 import cz.muni.fi.pv239.teamup.R
 import cz.muni.fi.pv239.teamup.data.SportEvent
 import cz.muni.fi.pv239.teamup.recycler.RecyclerViewAdapter
-import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
+import kotlinx.android.synthetic.main.activity_my_events.*
 
 
 class MyEventsActivity : AppCompatActivity() {
@@ -53,9 +52,6 @@ class MyEventsActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = listAdapter
-        val dividerItemDecoration = DividerItemDecoration(recyclerView.context, layoutManager.orientation)
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.line)!!)
-        recyclerView.addItemDecoration(dividerItemDecoration)
 
         val childEventListener = object : ChildEventListener {
             override fun onCancelled(dataSnapshot: DatabaseError?) {
