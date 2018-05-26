@@ -3,6 +3,7 @@ package cz.muni.fi.pv239.teamup.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -17,13 +18,19 @@ import cz.muni.fi.pv239.teamup.R
 import cz.muni.fi.pv239.teamup.data.SportEvent
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
+import android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS
+import android.content.Intent
+import android.content.Context.LOCATION_SERVICE
+import android.location.LocationManager
+
+
 
 
 /**
  * A simple [Fragment] subclass.
  */
 @RuntimePermissions
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
 
     // tag that is used in the logs
     private val TAG = MapFragment::class.java.name
@@ -96,6 +103,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // move the camera to the center of the target country and set minimal zoom
         mapCenter = viewBorder.center
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(viewBorder.center, defaultZoom))
+
+        // set what to do when my location button is clicked
+        gMap.setOnMyLocationButtonClickListener(this)
     }
 
     fun addMarker(key: String, event: SportEvent) {
@@ -121,11 +131,27 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
+    override fun onMyLocationButtonClick(): Boolean {
+        // check whether GPS enabled
+        val lm = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+
+        if (!gps_enabled) {
+            // if not enabled, ask user to enable
+            val intent = Intent(ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
+            return true
+        } else {
+            return false
+        }
+    }
+
     @SuppressLint("MissingPermission")
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-    public fun enableLocation() {
+    fun enableLocation() {
         // For showing a move to my location button
         gMap.isMyLocationEnabled = true
+        gMap.uiSettings.isMyLocationButtonEnabled = true
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
