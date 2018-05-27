@@ -1,16 +1,23 @@
 package cz.muni.fi.pv239.teamup.activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.firebase.ui.auth.AuthUI
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.places.Places
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import cz.muni.fi.pv239.teamup.R
@@ -28,11 +35,20 @@ class MainActivity : AppCompatActivity() {
     // all events
     private val events = mutableMapOf<String, SportEvent>()
 
+    // sorted events
+    private val sortedEvents = sortedSetOf<SportEvent>(
+            compareBy({ if (it.dist != null) it.dist else 10000f },
+                      { SportEvent.dateFormatter.parse(it.date) },
+                      { SportEvent.timeFormatter.parse(it.time) }))
+
     // selected
     private var selectedView: View? = null
 
     // list adapter
     private lateinit var listAdapter: RecyclerViewAdapter
+
+    // location
+    private var currentLocation: Location? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,14 +63,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         // register recycler view
-        listAdapter = RecyclerViewAdapter(events, { event, view ->
+        listAdapter = RecyclerViewAdapter(sortedEvents, { event, view ->
             selectedView?.isSelected = false
             view.isSelected = true
             selectedView = view
             val intent = Intent(this, EventDetailActivity::class.java)
             intent.putExtra("eventKey", event.key)
             startActivity(intent)
-        })
+        }, true)
 
         val layoutManager = LinearLayoutManager(applicationContext)
 
@@ -76,7 +92,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-                events.remove(dataSnapshot.key)
+                val event = events.remove(dataSnapshot.key)
+                sortedEvents.remove(event)
                 listAdapter.notifyDataSetChanged()
             }
 
@@ -94,12 +111,16 @@ class MainActivity : AppCompatActivity() {
 
                 if (SportEvent.getDateWithTime(event.date, event.time).time.after(cal.time)) {
                     events[dataSnapshot.key] = event
+                    sortedEvents.add(event)
+                    addDistance(event)
                     listAdapter.notifyDataSetChanged()
                 }
             }
         }
         database.child("events").addChildEventListener(childEventListener)
 
+        // get location
+        getCurrentLocation()
     }
 
 
@@ -140,4 +161,52 @@ class MainActivity : AppCompatActivity() {
         // do nothing - we don't want to return to sign in page
     }
 
+    @SuppressLint("MissingPermission")
+    private fun getCurrentLocation() {
+        // get location client
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        // try to ping GPS, so that the last known location is updated
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {}
+        }
+        fusedLocationClient.requestLocationUpdates(LocationRequest(), locationCallback, null)
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+        // get last known location
+        fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    currentLocation = location
+                    if (location == null) {
+                        Snackbar.make(constraintLayoutMainView, getString(R.string.enableGPS), Snackbar.LENGTH_INDEFINITE)
+                                .setAction(getString(R.string.tryAgain), { getCurrentLocation() })
+                                .show()
+                    } else {
+                        // update distances
+                        events.forEach {addDistance(it.value)}
+                    }
+                }
+    }
+
+    private fun addDistance(event: SportEvent) {
+        // get place
+        Places.getGeoDataClient(this, null).getPlaceById(event.locationId).addOnCompleteListener({ task ->
+            if (task.isSuccessful) {
+                val places = task.result
+                val placeInList = places.get(0)
+                val place = placeInList.freeze()
+                places.release()
+                val curLocation = currentLocation
+                if (curLocation != null) {
+                    val eventLocation = Location(event.locationName)
+                    eventLocation.latitude = place.latLng.latitude
+                    eventLocation.longitude = place.latLng.longitude
+                    sortedEvents.remove(event)
+                    event.dist = curLocation.distanceTo(eventLocation) / 1000f
+                    sortedEvents.add(event)
+                    listAdapter.notifyDataSetChanged()
+                }
+            } else {
+                Log.e(this::class.java.name, "Default place not found.")
+            }
+        })
+    }
 }

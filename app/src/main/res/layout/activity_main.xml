@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayoutUpcomingEventsView"
+    android:id="@+id/constraintLayoutMainView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
@@ -42,7 +42,7 @@
                 android:id="@+id/headerName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".25"
+                android:layout_weight=".19"
                 android:text="@string/title"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -51,7 +51,7 @@
                 android:id="@+id/headerLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".25"
+                android:layout_weight=".18"
                 android:text="@string/place"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -60,7 +60,7 @@
                 android:id="@+id/headerDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".25"
+                android:layout_weight=".188"
                 android:text="@string/date"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -69,8 +69,17 @@
                 android:id="@+id/headerTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".25"
+                android:layout_weight=".21"
                 android:text="@string/time"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/headerDist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".22"
+                android:text="@string/km"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

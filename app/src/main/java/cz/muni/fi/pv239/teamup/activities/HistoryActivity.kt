@@ -3,9 +3,7 @@ package cz.muni.fi.pv239.teamup.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.google.firebase.FirebaseApp
@@ -25,6 +23,11 @@ class HistoryActivity : AppCompatActivity() {
     // all events
     private val events = mutableMapOf<String, SportEvent>()
 
+    // sorted events
+    private val sortedEvents = sortedSetOf<SportEvent>(
+            compareBy({ SportEvent.dateFormatter.parse(it.date) },
+                      { SportEvent.timeFormatter.parse(it.time) }))
+
     // selected
     private var selectedView: View? = null
 
@@ -40,7 +43,7 @@ class HistoryActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().reference
 
         // register recycler view
-        listAdapter = RecyclerViewAdapter(events, { event, view ->
+        listAdapter = RecyclerViewAdapter(sortedEvents, { event, view ->
             selectedView?.isSelected = false
             view.isSelected = true
             selectedView = view
@@ -66,7 +69,8 @@ class HistoryActivity : AppCompatActivity() {
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-                events.remove(dataSnapshot.key)
+                val event = events.remove(dataSnapshot.key)
+                sortedEvents.remove(event)
                 listAdapter.notifyDataSetChanged()
             }
 
@@ -85,6 +89,7 @@ class HistoryActivity : AppCompatActivity() {
                 if (SportEvent.getDateWithTime(event.date, event.time).time.before(cal.time)
                         && event.signedUsers.contains(uid)) {
                     events[dataSnapshot.key] = event
+                    sortedEvents.add(event)
                     listAdapter.notifyDataSetChanged()
                 }
             }

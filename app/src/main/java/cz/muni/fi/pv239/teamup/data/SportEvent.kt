@@ -33,4 +33,6 @@ data class SportEvent(
             return cal
         }
     }
+
+    var dist: Float? = null
 }

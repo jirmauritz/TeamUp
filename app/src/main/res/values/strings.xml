@@ -48,4 +48,6 @@
     <string name="extraParticipants"> + %d účastník</string>
     <string name="extraParticipantsFour">+ %d účastníci</string>
     <string name="extraParticipantsFive">+ %d účastníků</string>
+    <string name="km">km</string>
+    <string name="enableGPS">Zapněte GPS, pokud chcete vidět vzdálenosti.</string>
 </resources>
