@@ -92,6 +92,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
 
     fun addMarker(key: String, event: SportEvent) {
         // get place
+        if (activity == null) return
         Places.getGeoDataClient(activity as EventDetailActivity, null).getPlaceById(event.locationId).addOnCompleteListener({ task ->
             if (task.isSuccessful) {
                 val places = task.result

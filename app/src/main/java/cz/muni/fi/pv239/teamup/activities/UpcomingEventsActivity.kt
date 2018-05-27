@@ -42,6 +42,9 @@ class UpcomingEventsActivity : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         database = FirebaseDatabase.getInstance().reference
 
+        // shared preferencies
+        val shpr = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
+
         // register recycler view
         listAdapter = RecyclerViewAdapter(sortedEvents, { event, view ->
             selectedView?.isSelected = false
@@ -50,7 +53,7 @@ class UpcomingEventsActivity : AppCompatActivity() {
             val intent = Intent(this, EventDetailActivity::class.java)
             intent.putExtra("eventKey", event.key)
             startActivity(intent)
-        })
+        }, shpr.getString("user.uid", null))
 
         val layoutManager = LinearLayoutManager(applicationContext)
 

@@ -5,5 +5,6 @@
     <color name="colorPrimaryExtraLight">#ecdcd0</color>
     <color name="colorPrimaryDark">#634025</color>
     <color name="colorAccent">#4060ff</color>
+    <color name="colorAccentLight">#869afa</color>
     <color name="colorError">#de1933</color>
 </resources>

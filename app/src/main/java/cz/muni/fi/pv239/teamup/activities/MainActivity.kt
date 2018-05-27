@@ -58,9 +58,13 @@ class MainActivity : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         database = FirebaseDatabase.getInstance().reference
 
+        // action when button click
         fabMainView.setOnClickListener { view ->
             run { startActivity(Intent(this, AddEventActivity::class.java)) }
         }
+
+        // shared preferencies
+        val shpr = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
 
         // register recycler view
         listAdapter = RecyclerViewAdapter(sortedEvents, { event, view ->
@@ -70,7 +74,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, EventDetailActivity::class.java)
             intent.putExtra("eventKey", event.key)
             startActivity(intent)
-        }, true)
+        }, shpr.getString("user.uid", null), true)
 
         val layoutManager = LinearLayoutManager(applicationContext)
 
