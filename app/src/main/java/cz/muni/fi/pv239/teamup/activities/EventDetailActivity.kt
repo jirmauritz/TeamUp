@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import com.google.firebase.FirebaseApp
@@ -25,6 +26,9 @@ class EventDetailActivity : AppCompatActivity() {
 
     // event
     private lateinit var event: SportEvent
+
+    // from history
+    private val fromHistory: Boolean by lazy { intent.getBooleanExtra("fromHistory", false) }
 
     // participants
     private var participants: MutableList<String> = mutableListOf()
@@ -66,7 +70,7 @@ class EventDetailActivity : AppCompatActivity() {
                 participantsAdapter.notifyDataSetChanged()
                 // if actual user equals this one, change text to remove user
                 val shpr = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
-                if (user.uid == shpr.getString("user.uid", null)) {
+                if (!fromHistory && user.uid == shpr.getString("user.uid", null)) {
                     joinButton.text = getString(R.string.removeFromEvent)
                     joinButton.visibility = View.VISIBLE
                 }
@@ -92,8 +96,8 @@ class EventDetailActivity : AppCompatActivity() {
                 // set title
                 supportActionBar?.title = event.name
 
-                // hide button if full
-                if (event.actualPeople == event.maxPeople) {
+                // hide button if full or fromHistory
+                if (fromHistory || event.actualPeople == event.maxPeople) {
                     joinButton.visibility = View.GONE
                 }
 
