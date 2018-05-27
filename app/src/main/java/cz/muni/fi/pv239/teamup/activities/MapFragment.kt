@@ -43,10 +43,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
     val markers = mutableMapOf<String, Marker>()
 
     private val defaultZoom: Float by lazy { resources.getString(R.string.defaultZoom).toFloat() }
-    private val southBorder: Double by lazy { resources.getString(R.string.southBorder).toDouble() }
-    private val westBorder: Double by lazy { resources.getString(R.string.westBorder).toDouble() }
-    private val northBorder: Double by lazy { resources.getString(R.string.northBorder).toDouble() }
-    private val eastBorder: Double by lazy { resources.getString(R.string.eastBorder).toDouble() }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -89,20 +85,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
 
         // disable rotation of the map by two fingers
         gMap.uiSettings.isRotateGesturesEnabled = false
-
-        // set minimal zoom level, so that users dont zoom out to whole europe
-        gMap.setMinZoomPreference(defaultZoom)
-
-        // restrict the view on the country only
-        val viewBorder = LatLngBounds(
-                LatLng(southBorder, westBorder),
-                LatLng(northBorder, eastBorder))
-        // constrain the camera target to the country bounds
-        gMap.setLatLngBoundsForCameraTarget(viewBorder)
-
-        // move the camera to the center of the target country and set minimal zoom
-        mapCenter = viewBorder.center
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(viewBorder.center, defaultZoom))
 
         // set what to do when my location button is clicked
         gMap.setOnMyLocationButtonClickListener(this)
