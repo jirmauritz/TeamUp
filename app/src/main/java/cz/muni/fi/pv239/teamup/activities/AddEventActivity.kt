@@ -37,6 +37,14 @@ class AddEventActivity :
 
     private var dateTime: Calendar = Calendar.getInstance()
 
+    private val recreate: Boolean by lazy { intent.getBooleanExtra("recreate", false) }
+    private val timeExtra: String by lazy { intent.getStringExtra("time") }
+    private val placeNameExtra: String by lazy { intent.getStringExtra("placeName") }
+    private val placeIdExtra: String by lazy { intent.getStringExtra("placeId") }
+    private val eventNameExtra: String by lazy { intent.getStringExtra("eventName") }
+    private val maxPeopleExtra: Int by lazy { intent.getIntExtra("maxPeople", 0) }
+
+
     private lateinit var location: Place
 
     private val database: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
@@ -63,7 +71,7 @@ class AddEventActivity :
                 true
         )
         // set default place as location
-        Places.getGeoDataClient(this, null).getPlaceById(DEFAULT_PLACE_ID).addOnCompleteListener({ task ->
+        Places.getGeoDataClient(this, null).getPlaceById(if(recreate) placeIdExtra else DEFAULT_PLACE_ID).addOnCompleteListener({ task ->
             if (task.isSuccessful) {
                 val places = task.result
                 val place = places.get(0)
@@ -77,6 +85,12 @@ class AddEventActivity :
 
         date_view.text = formatDate()
         time_view.text = SportEvent.timeFormatter.format(now.time)
+
+        if (recreate) {
+            time_view.text = timeExtra
+            eventNameView.setText(eventNameExtra)
+            maxPeopleView.setText(maxPeopleExtra.toString())
+        }
     }
 
     fun onAddClick(v: View) {
@@ -89,12 +103,13 @@ class AddEventActivity :
                 eventNameView.text.toString(),
                 shpr.getString("user.uid", null),
                 SportEvent.dateFormatter.format(dateTime.time),
-                SportEvent.timeFormatter.format(dateTime.time),
-                location.id,
-                location.name.toString(),
+                if (recreate) timeExtra else SportEvent.timeFormatter.format(dateTime.time),
+                if (recreate) placeIdExtra else location.id,
+                if (recreate) placeNameExtra else location.name.toString(),
                 maxPeopleView.text.toString().toInt(),
                 actualPeopleView.text.toString().toInt(),
-                mutableListOf(shpr.getString("user.uid", null)))
+                mutableListOf(shpr.getString("user.uid", null))
+        )
         database.child("events").child(key).setValue(event, { databaseError: DatabaseError?, _ ->
             if (databaseError == null) {
                 Snackbar.make(v, getString(R.string.successfulyCreated), Snackbar.LENGTH_LONG).show()

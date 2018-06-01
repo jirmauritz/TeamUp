@@ -1,10 +1,10 @@
 package cz.muni.fi.pv239.teamup.activities
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import com.google.firebase.FirebaseApp
@@ -96,9 +96,13 @@ class EventDetailActivity : AppCompatActivity() {
                 // set title
                 supportActionBar?.title = event.name
 
-                // hide button if full or fromHistory
-                if (fromHistory || event.actualPeople == event.maxPeople) {
+                // hide button if full
+                if (event.actualPeople == event.maxPeople) {
                     joinButton.visibility = View.GONE
+                }
+
+                if (fromHistory) {
+                    joinButton.text = getString(R.string.recreateEvent)
                 }
 
                 // add extra participants
@@ -146,6 +150,19 @@ class EventDetailActivity : AppCompatActivity() {
     }
 
     fun joinButtonAction(v: View) {
+        if (fromHistory) {
+            val intent = Intent(this, AddEventActivity::class.java)
+            intent.putExtra("time", event.time)
+            intent.putExtra("placeId", event.locationId)
+            intent.putExtra("placeName", event.locationName)
+            intent.putExtra("recreate", true)
+            intent.putExtra("eventName", event.name)
+            intent.putExtra("maxPeople", event.maxPeople)
+
+            startActivity(intent)
+            return
+        }
+
         val shpr = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
         if (event.signedUsers.contains(shpr.getString("user.uid", null))) {
             // removal

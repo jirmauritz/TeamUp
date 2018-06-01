@@ -50,4 +50,5 @@
     <string name="extraParticipantsFive">+ %d účastníků</string>
     <string name="km">km</string>
     <string name="enableGPS">Zapněte GPS, pokud chcete vidět vzdálenosti.</string>
+    <string name="recreateEvent">Znovu udělat událost</string>
 </resources>
