@@ -97,7 +97,7 @@ class EventDetailActivity : AppCompatActivity() {
                 supportActionBar?.title = event.name
 
                 // hide button if full
-                if (event.actualPeople == event.maxPeople) {
+                if (!fromHistory && event.actualPeople == event.maxPeople) {
                     joinButton.visibility = View.GONE
                 }
 
