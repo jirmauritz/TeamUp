@@ -23,12 +23,14 @@ class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
             eventKmRow.visibility = View.VISIBLE
         }
-        if (event.signedUsers.contains(user)) {
-            cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimaryLight))
-        }
         if (user == event.userUid) {
             cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorAccentLight))
+        } else if (event.signedUsers.contains(user)) {
+            cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimaryLight))
+        } else {
+            cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimaryExtraLight))
         }
+
         setOnClickListener { listener(event, it) }
     }
 }
